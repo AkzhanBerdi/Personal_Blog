@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Create article</h1>
+
+<form action="{% url 'article_create' %}" method="POST">
+    {% csrf_token %}
+
+    <div class="mb-3"> 
+        <label for="title" class="form-label">Article</label>
+        <input type="text" class="form-control" name="title" id="title" placeholder="Input your name">
+    </div>
+
+        <div class="mb-3"> 
+            <label for="author" class="form-label">Author</label>
+            <select class="form-select" id="author", name="author_id">
+                {% for author in authors %}
+                    <option value ="{{ author.pk }}">{{ author }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+            <div class="mb-3">
+                <label for="body" class="form-label">Type here</label>
+                <textarea class="form-control" name="body" id="body" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+</form>
+{% endblock%}

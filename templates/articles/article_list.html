@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="list-group">
+            {% for article in articles %}
+                {% if article.is_deleted == False %}
+                    <a href="{% url 'article_detail' article.pk %}" class="list-group-item list-group-item-action">{{ article }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{% url 'article_create' %}" class="btn btn-success">Create new</a>
+</div>
+
+{% endblock %}

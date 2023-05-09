@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% block content %}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ article.author }}</h5>
+            <h5 class="card-title">{{ article.title }}</h5>
+            <p class="card-text">{{ article.body }}</p>
+            <div>
+              <a class="btn btn-primary" href="{% url 'article_update' article.pk %}" role="button">Edit this article</a>
+              <a class="btn btn-danger" href="{% url 'article_delete' article.pk %}" role="button">Delete this article</a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+      {% endblock %}
