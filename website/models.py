@@ -25,3 +25,13 @@ class Genre(models.Model):
 
     def __str__(self):
         return f'{self.pk}. {self.title}'
+
+class Comment(models.Model):
+    article = models.ForeignKey('website.Article', on_delete=models.CASCADE, related_name ='comments')
+    text = models.TextField(max_length=500)
+    author = models.CharField(max_length=40, null=True, blank=True, default ='user_007')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name = 'created date')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name = 'updated date')
+
+    def __str__(self):
+        return self.text[:20]

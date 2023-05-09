@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from website.models import Article, Author
+from django.views import View
+from ..forms.genre_forms import CommentForm
 # from django.urls import reverse
 
 
@@ -33,6 +35,15 @@ def article_detail_view(request, *args, **kwargs):
     article = get_object_or_404(Article, pk=kwargs.get('pk'))
     return render(request,'articles/article_detail.html', context={'article' : article})
 
+class ArticleDetailView(View):
+
+    def get(self, request, *args, **kwargs):
+        form = CommentForm()
+        return render(request, 'articles/article_detail.html', context={
+            'article': get_object_or_404(Article,pk=kwargs.get('pk')),
+            'form': form
+            }
+        )
 
 def article_update_view(request, pk):
     article = get_object_or_404(Article, pk=pk)

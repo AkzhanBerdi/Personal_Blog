@@ -13,6 +13,24 @@
             </div>
         </div>
       </div>
+
+      <div>
+        <ul>
+          {% for comment in article.comments.all %}
+            <li>Author: {{ comment.author }} </li>
+            <li>Text: {{ comment.text }} </li>
+            <li class="mb-3">Date: {{ comment.created_at }} </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <form action="{% url 'add_comment' article.pk %}" method="POST">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <input type="submit" class="btn btn-success" value="Leave a comment">
+        </form>
+      </div>
     </div>
   </div>
       {% endblock %}
