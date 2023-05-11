@@ -6,7 +6,7 @@
 <form action="{% url 'article_create' %}" method="POST">
     {% csrf_token %}
 
-    <div class="mb-3"> 
+    <!-- <div class="mb-3"> 
         <label for="title" class="form-label">Article</label>
         <input type="text" class="form-control" name="title" id="title" placeholder="Input your name">
     </div>
@@ -23,7 +23,12 @@
             <div class="mb-3">
                 <label for="body" class="form-label">Type here</label>
                 <textarea class="form-control" name="body" id="body" rows="3"></textarea>
-    </div>
+    </div> -->
+
+    {% for field in form %}
+        <label for="{{field.id_for_label}}">{{ field.label }}</label>
+        <p>{{field}}</p>
+    {% endfor %}
 
     <button type="submit" class="btn btn-success">Create</button>
 </form>

@@ -14,7 +14,11 @@ class Article(models.Model):
     is_deleted = models.BooleanField(default=False, verbose_name='Deleted')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date and Time created')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Date and Time updated')
-
+    tags = models.ManyToManyField(
+        'website.Tag', 
+        related_name='articles',
+        blank=True
+    )
     def __str__(self):
         return f"{self.pk}.{self.title}"
 
@@ -35,3 +39,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text[:20]
+
+class Tag(models.Model):
+    name = models.CharField(max_length=30, verbose_name='Tag')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created Date and Time')
+
+    def __str__(self):
+        return self.name

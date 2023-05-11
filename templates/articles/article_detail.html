@@ -11,6 +11,13 @@
               <a class="btn btn-primary" href="{% url 'article_update' article.pk %}" role="button">Edit this article</a>
               <a class="btn btn-danger" href="{% url 'article_delete' article.pk %}" role="button">Delete this article</a>
             </div>
+
+            <div calss="mt-5">
+              Tags: {% for tag in article.tags.all %}
+                {{ tag.name }}{% if not forloop.last %}, {% endif %}
+              {% endfor %} 
+            </div>
+
         </div>
       </div>
 

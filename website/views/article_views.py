@@ -1,27 +1,37 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from website.models import Article, Author
 from django.views import View
-from ..forms.genre_forms import CommentForm
+from ..forms.genre_forms import CommentForm, ArticleForm
 # from django.urls import reverse
 
 
 
 def article_create_view(request):
     if request.method == 'GET':
+        form = ArticleForm()
         return render(
             request,
             'articles/create_article.html', 
-            context={'authors': Author.objects.all()}
+            context={'authors': Author.objects.all(), 'form': form}
         )
     elif request.method == 'POST':
-        author = get_object_or_404(Author, pk=request.POST.get('author_id'))
-        article = Article.objects.create(
-            title = request.POST.get('title'),
-            author = author,
-            body = request.POST.get('body')
-        )
+        form = ArticleForm(request.POST)
+        # author = get_object_or_404(Author, pk=request.POST.get('author_id'))
+        if form.is_valid():
+            tags = form.cleaned_data.pop('tags')
+            article = Article.objects.create(
+                title = form.cleaned_data.get('title'),
+                author = form.cleaned_data.get('author'),
+                body = form.cleaned_data.get('body')
+            )
+            article.tags.set(tags)
 
-        return redirect('article_detail',pk=article.pk)
+            return redirect('article_detail',pk=article.pk)
+        else:
+            return render(
+                request, 
+                'articles/create_article.html',
+                context = {'form': form})
 
 
 def article_list_view(request):
