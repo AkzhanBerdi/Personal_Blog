@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+
 {% block content %}
   <div class="row">
     <div class="col-md-6">
@@ -17,27 +18,33 @@
                 {{ tag.name }}{% if not forloop.last %}, {% endif %}
               {% endfor %} 
             </div>
-
         </div>
       </div>
 
-      <div>
-        <ul>
-          {% for comment in article.comments.all %}
-            <li>Author: {{ comment.author }} </li>
-            <li>Text: {{ comment.text }} </li>
-            <li class="mb-3">Date: {{ comment.created_at }} </li>
+      <div class="mt-5">
+        <ul class="list-group">
+          {% for comment in comments %}
+            <li class="list-group-item mb-3">
+              <div> @{{comment.author }}</div> 
+              <div>{{ comment.text }} </div>
+              <div style="font-size: 10px; color: grey;"> {{comment.created_at}} </div>
+              <div>
+                <a href="{% url 'update_comment' comment.pk %}" class="btn btn-primary btn-sm"> Edit </a>
+                <a href="{% url 'delete_comment' comment.pk %}" class="btn btn-danger btn-sm"> Delete </a>
+              </div>
+            </li>
           {% endfor %}
         </ul>
       </div>
 
-      <div>
+      <a href="{% url 'add_coment' article.pk %}" class="btn btn-succe"> Add a comment </a>
+      <!-- <div>
         <form action="{% url 'add_comment' article.pk %}" method="POST">
           {% csrf_token %}
           {{ form.as_p }}
           <input type="submit" class="btn btn-success" value="Leave a comment">
         </form>
-      </div>
+      </div> -->
     </div>
   </div>
       {% endblock %}

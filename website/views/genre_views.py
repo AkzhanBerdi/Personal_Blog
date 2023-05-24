@@ -1,24 +1,15 @@
-# import sys
-# sys.path.append("..")
-from django.shortcuts import render
+from django.urls import reverse_lazy
 from website.models import Genre
-from ..forms.genre_forms import GenreForm
-from django.shortcuts import redirect
+from ..forms import GenreForm
+from django.views.generic import ListView, CreateView
 
-def genre_list_view(request):
-    return render(request, 'genre/genre_list.html', context ={'genres': Genre.objects.all()})
+class GenreListView(ListView):
+    template_name = 'genres/list.html'
+    context_key = 'genres'
+    model = Genre
 
-def genre_create_view(request):
-    if request.method == 'GET':
-        form = GenreForm()
-        return render(request,'genre/genre_create.html', context={'form':form})
-    elif request.method == 'POST':
-        form = GenreForm(request.POST)
-        if form.is_valid():
-            genre = Genre.objects.create(
-                title = form.cleaned_data.get('title'),
-                description = form.cleaned_data.get('description')
-            )
-            return redirect('genre_list')
-        else:
-            return render(request,'genre/genre_create.html', context={'form': form}) 
+class GenreCreateView(CreateView):
+    model = Genre
+    template_name = 'genres/create.html'
+    form_class = GenreForm
+    success_url = reverse_lazy('genre_list')

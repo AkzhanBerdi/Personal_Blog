@@ -1,81 +1,50 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from website.models import Author, Article
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from website.models import Author
+from website.forms import AuthorForm
+
+class AuthorView(CreateView):
+    model = Author
+    template_name = 'authors/create.html'
+    form_class = AuthorForm
+    success_url = reverse_lazy('author_list')
+ 
+    def get_context_data(self, **kwargs):
+        context = super().get_context(**kwargs)
+        context['link'] = reverse('author_create')
+        return context
 
 
-def author_create_view(request):
-    first_name = request.POST.get('first_name')
-    last_name = request.POST.get('last_name')
-    author = Author(first_name=first_name, last_name=last_name)
-    errors = {}
-
-    if first_name and len(first_name) > 50:
-        errors['first_name'] = 'Too many characters' 
-    if last_name and len(last_name) > 50:
-        errors['last_name'] = 'Too many characters' 
-
-    if request.method == 'GET':
-        return render(
-            request,
-            'authors/create_author.html', 
-            context={'link': reverse('author_create')
-            }
-        )
-    elif request.method == 'POST':
-        if not errors:
-            author = Author.objects.create(
-                first_name = first_name,
-                last_name = last_name,
-            )
-
-            return redirect('author_list')
-        else:
-            return render(
-                request,
-                'authors/create_author.html',
-                context = {'errors': errors, 'author': author}
-            )
+class AuthorListView(ListView):
+    template_name = 'authors/list.html'
+    model = Author
+    context_key = 'authors'
+    paginate_by = 5
+    paginate_orphans = 1
 
 
-def author_list_view(request):
-    author = Author.objects.all()
-    return render(request, 'authors/author_list.html', context={'author': author})
+class AuthorListView(ListView):
+    template_name = 'authors/list.html'
+    model = Author
+    context_key = 'authors'
+    paginate_by = 5
+    paaginate_orphans = 1
 
 
-def author_update_view(request, pk):
-    author = get_object_or_404(Author,pk=pk)
+class AuthorUpdateView(UpdateView):
+    model = Author
+    template_name = 'authors/update.html'
+    form_class = AuthorForm
+    success_url = reverse_lazy('author_list')
 
-    if request.method == 'GET':
-        return render(
-            request, 
-            'authors/author_update.html', 
-            context={
-                'author': author,
-                'link': reverse('author_update', kwargs={'pk': pk})
-            }
-        )
-    elif request.method == 'POST':
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['link'] = reverse('author_create')
+        return context
+    
+class AuthorDeleteView(DeleteView):
+    model = Author
+    success_url = reverse_lazy('author_list')
 
-        author.first_name = request.POST.get('first_name')
-        author.last_name = request.POST.get('last_name')
-        
-        errors = {}
-        if author.first_name and len(author.first_name) > 50:
-            errors['first_name'] = 'Too many characters' 
-        if author.last_name and len(author.last_name) > 50:
-            errors['last_name'] = 'Too many characters' 
-        
-        if not errors:
-            author.save()
-            return redirect('author_list')
-        
-        elif errors:
-            return render(
-                request, 
-                'authors/author_update.html', 
-                context={
-                    'author': author,
-                    'link': reverse('author_update', kwargs={'pk': pk}),
-                    'errors': errors
-                }
-            )
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)

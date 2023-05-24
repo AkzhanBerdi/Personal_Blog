@@ -1,12 +1,13 @@
 from django.db import models
 
 class Author(models.Model):
-    first_name = models.CharField(max_length=50, null=False, verbose_name="Author's first name")
-    last_name = models.CharField(max_length=50, null=False, verbose_name="Author's last name")
+    first_name = models.CharField(max_length=50, null=False, blank=False, verbose_name="Author's first name")
+    last_name = models.CharField(max_length=50, null=False, blank=False, verbose_name="Author's last name")
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-# Create your models here.
+    
+
 class Article(models.Model):
     title = models.CharField(max_length=200, null=False, blank=False, verbose_name='title')
     author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='author')
@@ -19,21 +20,25 @@ class Article(models.Model):
         related_name='articles',
         blank=True
     )
+    
     def __str__(self):
         return f"{self.pk}.{self.title}"
 
+    class Meta:
+        verbose_name = 'Article'
+        verbose_name_plural = 'Articles'
+
 class Genre(models.Model):
     title = models.CharField(max_length=50, null=False, blank=False, verbose_name='Title')
-    description = models.TextField(max_length=1000, null=True, blank=True, verbose_name='Description')
-
+    description = models.TextField(max_length=1000, null=False, blank=False, verbose_name='Description')
 
     def __str__(self):
         return f'{self.pk}. {self.title}'
 
 class Comment(models.Model):
-    article = models.ForeignKey('website.Article', on_delete=models.CASCADE, related_name ='comments')
-    text = models.TextField(max_length=500)
-    author = models.CharField(max_length=40, null=True, blank=True, default ='user_007')
+    article = models.ForeignKey('website.Article', on_delete=models.CASCADE, related_name ='comments', verbose_name= 'Article')
+    text = models.TextField(max_length=500, verbose_name='Comments')
+    author = models.CharField(max_length=40, null=True, blank=True, default ='user_007', verbose_name='Author')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name = 'created date')
     updated_at = models.DateTimeField(auto_now=True, verbose_name = 'updated date')
 
@@ -46,3 +51,4 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+

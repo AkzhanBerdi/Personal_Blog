@@ -15,4 +15,7 @@
     <a href="{% url 'author_create' %}" class="btn btn-success">Create new</a>
 </div>
 
+{% if is_paginated %}
+    {% include 'partial/pagination.html' %}
+{% endif %}
 {% endblock %}
