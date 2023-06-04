@@ -21,10 +21,25 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'genre_list' %}">Genre List</a>
           </li>
+          {% if not request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="btn btn-info" href="{% url 'accounts:login' %}?next={{ request.get_full_path }}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-info" href="{% url 'accounts:user_registration' %}?next={{ request.get_full_path }}">Sign up</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <p> Hello <a href="{% url 'accounts:user_detail' user.pk %}"> {{ user.username }}</a></p>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-info" href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}"> Logout </a>
+          </li>
+          {% endif %}
         </ul>
         <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <input name="search" class="form-control me-2" type="search" placeholder="Find" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Find</button>
         </form>
       </div>
     </div>

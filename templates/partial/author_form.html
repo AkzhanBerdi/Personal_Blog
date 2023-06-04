@@ -26,5 +26,7 @@
     </div>
 
     <button type="submit" class="btn btn-success">{{ button_name }}</button>
-    <a href="{ url 'author_delete' author.pk %}" class="btn- btn-danger">Delete</a>
+    {% if button_name == 'Save' %}
+        <a href="{ url 'author_delete' author.pk %}" class="btn btn-danger">Delete</a>
+    {% endif %}
 </form>

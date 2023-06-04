@@ -8,8 +8,8 @@ class ParamMixin:
     template_name = None
     redirect_url = ''
     model = None
-    context_key = 'object'
-    key_kwargs = 'pk'
+    context_object_key = 'object'
+    key_kwarg = 'pk'
     kwargs = None
     object = None
 
@@ -21,7 +21,8 @@ class ParamMixin:
         return self.redirect_url
 
 class CustomFormView(View, ParamMixin):
-    def get(self,request, *args, **kwargs):
+
+    def get(self, request, *args, **kwargs):
         form = self.form_class()
         context = self.get_context_data(form=form)
         return render(request, self.template_name, context=context)
@@ -44,19 +45,25 @@ class CustomFormView(View, ParamMixin):
         return kwargs
 
 class CustomListView(TemplateView, ParamMixin):
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context[self.context_key] = self.get_objects()
+        context[self.context_object_key] = self.get_objects()
         return context
+
+    def get_objects(self):
+        return self.model.objects.all()
     
 
 class CustomDetailView(TemplateView, ParamMixin):
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context[self.context_key] = self.get_object()
+        context[self.context_object_key] = self.get_object()
         return context
     
 class CustomCreateView(View, ParamMixin):
+
     def get(self, request, *args, **kwargs):
         form = self.form_class()
         context = self.get_context_data(form=form)
@@ -76,12 +83,13 @@ class CustomCreateView(View, ParamMixin):
         self.object = form.save()
         return redirect(self.get_redirect_url())
     
-    def form_ivalid(self, form):
+    def form_invalid(self, form):
         context = {'form': form}
         return render(request=self.request, template_name=self.template_name, context=context)
     
 
 class CustomUpdateView(View, ParamMixin):
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.form_class(instance=self.object)
@@ -90,7 +98,7 @@ class CustomUpdateView(View, ParamMixin):
     
     def get_context_data(self, **kwargs):
         context = self.kwargs.copy()
-        context[self.context_key] = self.object
+        context[self.context_object_key] = self.object
         context.update(kwargs)
         return context
     
@@ -98,14 +106,14 @@ class CustomUpdateView(View, ParamMixin):
         self.object = form.save()
         return redirect(self.get_redirect_url())
     
-    def form_invalid(self, form)
+    def form_invalid(self, form):
         context = self.get_context_data(form=form)
         return render(self.request, self.template_name, context=context)
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.form_class(instance=self.object, data=request.POST)
-        if form.is_valid(form):
+        if form.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -131,4 +139,4 @@ class CustomDeleteView(View, ParamMixin):
         self.object.delete()
 
     def get_context_data(self, **kwargs):
-        return {self.context_key: self.object}
+        return {self.context_object_key: self.object}

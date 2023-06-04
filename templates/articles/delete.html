@@ -8,7 +8,7 @@
             <div class="card-body">
                 <p class="card-text">Are you sure on deleting this Article {{ article.pk }}?</p>
                 <div>
-                  <button type="submit" class="btn btn-primary"">Delete this article</button>
+                  <button type="submit" class="btn btn-danger">Delete this article</button>
                   <a class="btn btn-light" href="{% url 'article_detail' article.pk %}" role="button">Cancel</a>
                 </div>
             </div>

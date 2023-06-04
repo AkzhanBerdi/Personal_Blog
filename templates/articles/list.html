@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% include 'partial/search_form.html' %}
+    <!-- {% include 'partial/search_form.html' %} -->
 
     <table class="'table">
         <thead>
@@ -17,16 +17,16 @@
             {% for article in articles %}
             <tr>
                 <th scope="row">{{ forloop.counter }}</th>
-                <td><a href='{% url article_detail' article.pk %}'>{{ article.title }}</a></td>
+                <td><a href="{% url 'article_detail' article.pk %}">{{ article.title }}</a></td>
                 <td>{{ article.author }}</td>
-                <td>{{ article.created_at|date:"d M Y }}</td>
+                <td>{{ article.created_at|date:"d M Y" }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
     {% if is_paginated %} 
-        {% include 'partial/pagnination.html' %} 
+        {% include 'partial/pagination.html' %} 
     {% endif %}
 
 <div class="mt-3">

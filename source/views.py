@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
@@ -5,6 +7,9 @@ from django.views.generic import TemplateView
 #     return render(request,'index.html')
     
 
-class IndexView(TemplateView):
+class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
-    extra_context = {'hello': 'Hello, World!'}
+
+@login_required
+def index_view(request):
+    return render(request, 'index.html')

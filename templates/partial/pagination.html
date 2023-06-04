@@ -9,7 +9,7 @@
 
         <form class="current-page" method="get">
             <label for="page">
-                Страница <input type="text" name="page" id="page" value="{{ page_obj.numver }}">
+                Страница <input type="text" name="page" id="page" value="{{ page_obj.number }}">
                 from {{ page_obj.paginator.num_pages }}.
             </label>
         </form>
@@ -19,6 +19,6 @@
         {% else %}
             <span class="page-disabled">Next</span>
         {% endif %}
-        <a href="?page={{ page_obj.paginator.num_pages }}"> End</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}"> End &raquo;</a>
     </span>
 </div>

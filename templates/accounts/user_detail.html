@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>
+        My Profile {{user_obj.get_full_name|default:user_obj.username }}
+    </h1>
+    <div class="card" style="width: 25rem;">
+        <div class="card-body">
+            {% if user_obj.profile.avatar %}
+                <img src="{{ user_obj.profile.avatar.url }}" alt="avatar" width="250">
+            {% endif %}
+            <p class="card-text">Login: {{ user.obj.username }}</p>
+            <p class="card-text">First Name: {{ user.obj.first_name}}</p>
+            <p class="card-text">Last Name: {{ user.obj.last_name}}</p>
+            <p class="card-text">Birthdate: {{ user.obj.profile.birthdate}}</p>
+            <p class="card-text">Email: {{ user.obj.email}}</p>
+        </div>
+    </div>
+
+
+    <h5 class="mt-5">User's articles</h5>
+    <div class="mb-5">
+      {% include 'partial/article_list.html' %}
+    </div>
+  {% endblock %}

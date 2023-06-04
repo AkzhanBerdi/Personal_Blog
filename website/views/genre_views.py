@@ -1,11 +1,13 @@
-from django.urls import reverse_lazy
-from website.models import Genre
-from ..forms import GenreForm
 from django.views.generic import ListView, CreateView
+from django.urls import reverse_lazy
+
+from ..models import Genre
+from ..forms import GenreForm
+
 
 class GenreListView(ListView):
     template_name = 'genres/list.html'
-    context_key = 'genres'
+    context_object_key = 'genres'
     model = Genre
 
 class GenreCreateView(CreateView):

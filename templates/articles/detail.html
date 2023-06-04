@@ -5,12 +5,16 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
-            <h5 class="card-title">{{ article.author }}</h5>
             <h5 class="card-title">{{ article.title }}</h5>
+            <h5 class="card-title">{{ article.author }}</h5>
             <p class="card-text">{{ article.body }}</p>
             <div>
-              <a class="btn btn-primary" href="{% url 'article_update' article.pk %}" role="button">Edit this article</a>
-              <a class="btn btn-danger" href="{% url 'article_delete' article.pk %}" role="button">Delete this article</a>
+                  {% if perms.articles.change_article %}
+                      <a class="btn btn-primary" href="{% url 'article_update' article.pk %}" role="button">Edit this article</a>
+                  {% endif %}
+                  {% if perms.articles.delete_article %}
+                      <a class="btn btn-danger" href="{% url 'article_delete' article.pk %}" role="button">Delete this article</a>
+                  {% endif %}
             </div>
 
             <div calss="mt-5">
@@ -37,7 +41,7 @@
         </ul>
       </div>
 
-      <a href="{% url 'add_coment' article.pk %}" class="btn btn-succe"> Add a comment </a>
+      <a href="{% url 'add_comment' article.pk %}" class="btn btn-success"> Add a comment </a>
       <!-- <div>
         <form action="{% url 'add_comment' article.pk %}" method="POST">
           {% csrf_token %}
